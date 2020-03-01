@@ -46,7 +46,7 @@ public class FileController {
             if (status != 0)
             {
                 System.out.println("停止进程失败");
-                return "发布失败";
+                return "发布失败 ";
             }
 
             file.transferTo(dest);
@@ -59,10 +59,10 @@ public class FileController {
             if (status1 != 0)
             {
                 System.out.println("启动进程失败");
-                return "发布失败";
+                return "发布失败 ";
             }
 
-            return "发布成功";
+            return "发布成功 ";
 
         } catch (IOException e) {
             e.printStackTrace();
