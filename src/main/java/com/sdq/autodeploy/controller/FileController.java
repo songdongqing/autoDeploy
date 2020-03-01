@@ -1,5 +1,6 @@
 package com.sdq.autodeploy.controller;
 
+import com.sdq.autodeploy.controller.utils.ShellUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -9,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
 
 /**
  * Author:   chenfeiliang
@@ -23,6 +26,7 @@ public class FileController {
 
         return "upload";
     }
+
 
     @ResponseBody
     @RequestMapping("/upload")
@@ -46,23 +50,26 @@ public class FileController {
             if (status != 0)
             {
                 System.out.println("停止进程失败");
-                return "发布失败 ";
+                return "停止进程失败 ";
             }
 
             file.transferTo(dest);
 
             //运行上传的jar包
             String startCommand = "bash /home/shell.sh "+ fileName;
-            runtime.exec(startCommand);
+            pro = runtime.exec(startCommand);
 
-            int status1 = pro.waitFor();
-            if (status1 != 0)
+            status = pro.waitFor();
+
+            if (status != 0)
             {
                 System.out.println("启动进程失败");
-                return "发布失败 ";
+                return "启动进程失败 ";
             }
 
-            return "发布成功 ";
+            String ps = "jps";
+            String resltByInputStream = ShellUtil.runShell(ps);
+            return resltByInputStream;
 
         } catch (IOException e) {
             e.printStackTrace();
